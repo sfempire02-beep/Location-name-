@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share Your Location</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: white;
+    }
+
+    .box {
+      text-align: center;
+    }
+
+    h2 {
+      color: #222;
+      font-size: 25px;
+    }
+
+    button {
+      background: #1677ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 13px 30px;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Share Your Location</h2>
+    <button id="allow">Allow</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    document.getElementById("allow").onclick = () => {
+      const result = document.getElementById("result");
+
+      if (!navigator.geolocation) {
+        result.textContent = "Location is not supported.";
+        return;
+      }
+
+      result.textContent = "Waiting for permission...";
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          const link = document.createElement("a");
+          link.href = `https://www.google.com/maps?q=${lat},${lon}`;
+          link.textContent = "View location on Google Maps";
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+
+          result.textContent = "";
+          result.appendChild(link);
+        },
+        () => {
+          result.textContent =
+            "Location permission denied or unavailable.";
+        }
+      );
+    };
+  </script>
+</body>
+</html>
